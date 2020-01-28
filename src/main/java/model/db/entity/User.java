@@ -1,4 +1,4 @@
-package model.jdbc.entity;
+package model.db.entity;
 
 public class User {
     private long id;

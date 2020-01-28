@@ -1,7 +1,8 @@
-package model.jdbc.service;
+package model.db.service;
 
-import model.jdbc.dao.AbstractDao;
-import model.jdbc.entity.Exhibition;
+import model.db.dao.AbstractDao;
+import model.db.entity.Exhibition;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,11 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MySqlExpositionDao extends AbstractDao<Exhibition.Exposition> {
+    static final Logger logger = Logger.getLogger(MySqlExpositionDao.class);
+
+    public MySqlExpositionDao(Connection connection) {
+        super(connection);
+    }
 
     @Override
     protected String getInsertQuery() {
-        return "INSERT INTO exposition (name, about, image, exhib_id)\n" +
-                "VALUES (?, ?, ?, ?);";
+        return "INSERT INTO exposition VALUES (DEFAULT, ?, ?, ?, ?);";
     }
 
     @Override
@@ -48,7 +53,7 @@ public class MySqlExpositionDao extends AbstractDao<Exhibition.Exposition> {
                 result.add(temp);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Can't parse exposition result set", e);
         }
         return result;
     }
@@ -66,7 +71,7 @@ public class MySqlExpositionDao extends AbstractDao<Exhibition.Exposition> {
         try {
             setData(statement, object);
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Can't prepare exposition statement for insert", e);
         }
     }
 
@@ -76,7 +81,7 @@ public class MySqlExpositionDao extends AbstractDao<Exhibition.Exposition> {
             setData(statement, object);
             statement.setLong(5, object.getId());
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Can't prepare exposition statement for update", e);
         }
     }
 
@@ -85,11 +90,7 @@ public class MySqlExpositionDao extends AbstractDao<Exhibition.Exposition> {
         try {
             statement.setLong(1, object.getId());
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Can't prepare exposition statement for delete", e);
         }
-    }
-
-    public MySqlExpositionDao(Connection connection) {
-        super(connection);
     }
 }

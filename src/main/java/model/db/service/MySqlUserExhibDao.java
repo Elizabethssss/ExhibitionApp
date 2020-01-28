@@ -1,7 +1,8 @@
-package model.jdbc.service;
+package model.db.service;
 
-import model.jdbc.dao.AbstractDao;
-import model.jdbc.entity.UserExhib;
+import model.db.dao.AbstractDao;
+import model.db.entity.UserExhib;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,10 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MySqlUserExhibDao extends AbstractDao<UserExhib> {
+    static final Logger logger = Logger.getLogger(MySqlUserExhibDao.class);
+
+    public MySqlUserExhibDao(Connection connection) {
+        super(connection);
+    }
+
     @Override
     protected String getInsertQuery() {
-        return "INSERT INTO user_exhib (user_id, exhibition_id)\n" +
-                "VALUES (?, ?);";
+        return "INSERT INTO user_exhib VALUES (DEFAULT, ?, ?, ?);";
     }
 
     @Override
@@ -24,7 +30,7 @@ public class MySqlUserExhibDao extends AbstractDao<UserExhib> {
 
     @Override
     protected String getUpdateQuery() {
-        return "UPDATE user_exhib SET user_id = ?, exhibition_id = ?";
+        return "UPDATE user_exhib SET user_id = ?, exhibition_id = ?, is_bought = ?";
     }
 
     @Override
@@ -40,10 +46,11 @@ public class MySqlUserExhibDao extends AbstractDao<UserExhib> {
                 UserExhib temp = new UserExhib();
                 temp.setUserId(rs.getLong("user_id"));
                 temp.setExhibitionId(rs.getLong("exhibition_id"));
+                temp.setBought(rs.getBoolean("is_bought"));
                 result.add(temp);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Can't parse user_exhib result set", e);
         }
         return result;
     }
@@ -52,6 +59,7 @@ public class MySqlUserExhibDao extends AbstractDao<UserExhib> {
     protected void setData(PreparedStatement statement, UserExhib object) throws SQLException {
         statement.setLong(1, object.getUserId());
         statement.setLong(2, object.getExhibitionId());
+        statement.setBoolean(3, object.isBought());
     }
 
     @Override
@@ -59,7 +67,7 @@ public class MySqlUserExhibDao extends AbstractDao<UserExhib> {
         try {
             setData(statement, object);
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Can't prepare user_exhib statement for insert", e);
         }
     }
 
@@ -68,7 +76,7 @@ public class MySqlUserExhibDao extends AbstractDao<UserExhib> {
         try {
             setData(statement, object);
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Can't prepare user_exhib statement for update", e);
         }
     }
 
@@ -78,13 +86,7 @@ public class MySqlUserExhibDao extends AbstractDao<UserExhib> {
             statement.setLong(1, object.getUserId());
             statement.setLong(2, object.getExhibitionId());
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Can't prepare user_exhib statement for delete", e);
         }
-    }
-
-
-
-    public MySqlUserExhibDao(Connection connection) {
-        super(connection);
     }
 }

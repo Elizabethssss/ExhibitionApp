@@ -1,17 +1,17 @@
-package model.jdbc.dao;
+package model.db.dao;
 
-import model.jdbc.entity.Exhibition;
-import model.jdbc.entity.UserExhib;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class AbstractDao<T> implements GenericDao<T> {
     private Connection connection;
+    static final Logger logger = Logger.getLogger(AbstractDao.class);
 
     protected abstract String getInsertQuery();
     protected abstract String getSelectQuery();
@@ -25,6 +25,10 @@ public abstract class AbstractDao<T> implements GenericDao<T> {
     protected abstract void prepareStatementForUpdate(PreparedStatement statement, T object);
     protected abstract void prepareStatementForDelete(PreparedStatement statement, T object);
 
+    public AbstractDao(Connection connection) {
+        this.connection = connection;
+    }
+
     @Override
     public boolean add(T object) {
         String sql = getInsertQuery();
@@ -33,7 +37,7 @@ public abstract class AbstractDao<T> implements GenericDao<T> {
             ps.executeUpdate();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error in adding to db", e);
         }
         return false;
     }
@@ -46,7 +50,7 @@ public abstract class AbstractDao<T> implements GenericDao<T> {
             ps.executeUpdate();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error in updating db", e);
         }
         return false;
     }
@@ -59,13 +63,13 @@ public abstract class AbstractDao<T> implements GenericDao<T> {
             ps.executeUpdate();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error in deleting from db", e);
         }
         return false;
     }
 
     @Override
-    public T getById(long id) {
+    public Optional<T> getById(long id) {
         List<T> list = null;
         String sql = getSelectQuery();
         sql += " WHERE id = ?;";
@@ -74,12 +78,13 @@ public abstract class AbstractDao<T> implements GenericDao<T> {
             ResultSet rs = ps.executeQuery();
             list = parseResultSet(rs);
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error in getting by id from db", e);
         }
-        if (list == null || list.isEmpty())
-            return null;
+        if (list == null || list.isEmpty()) {
+            return Optional.empty();
+        }
 
-        return list.iterator().next();
+        return (Optional<T>) list.iterator().next();
     }
 
     @Override
@@ -90,30 +95,9 @@ public abstract class AbstractDao<T> implements GenericDao<T> {
             ResultSet rs = ps.executeQuery();
             list = parseResultSet(rs);
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error in getting all in db", e);
         }
         return list;
     }
 
-
-    public List<Exhibition> getListOfExhibByUserId(long id, Class<?> clazz) {
-        if(clazz == UserExhib.class) {
-            List<Exhibition> list = new ArrayList<>();
-            String sql = getSelectQuery();
-            sql += "WHERE user_id = ?;";
-            try (PreparedStatement ps = connection.prepareStatement(sql)) {
-                ps.setLong(1, id);
-                ResultSet rs = ps.executeQuery();
-                list = (List<Exhibition>) parseResultSet(rs);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            return list;
-        }
-        else return null;
-    }
-
-    public AbstractDao(Connection connection) {
-        this.connection = connection;
-    }
 }

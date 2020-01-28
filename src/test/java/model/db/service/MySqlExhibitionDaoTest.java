@@ -1,26 +1,41 @@
-package model.jdbc.service;
+package model.db.service;
 
-import model.jdbc.dao.GenericDao;
-import model.jdbc.entity.Exhibition;
+import model.db.dao.GenericDao;
+import model.db.entity.Exhibition;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import java.sql.Connection;
 import java.sql.Date;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+@RunWith(Parameterized.class)
 public class MySqlExhibitionDaoTest {
     Exhibition temp;
     Connection con;
     GenericDao dao;
 
+    @Parameterized.Parameter
+    public Class<?> clazz;
+
+    @Parameterized.Parameters
+    public static Collection<Object[]> data() {
+        return Arrays.asList(new Object[][] {
+                { Exhibition.class }
+        });
+    }
+
     @Before
     public void init() throws Exception {
         con = MySqlDaoFactory.getConnection();
-        dao = MySqlDaoFactory.getDao(con, Exhibition.class);
+        dao = MySqlDaoFactory.getDao(con, clazz);
 
         temp = new Exhibition();
         temp.setName("a");
@@ -53,8 +68,7 @@ public class MySqlExhibitionDaoTest {
 
     @Test
     public void getAll() throws Exception {
-        List<Exhibition> list;
-        list = dao.getAll();
+        List list = dao.getAll();
         assertNotNull(list);
         assertTrue(list.size() > 0);
     }

@@ -1,4 +1,4 @@
-package model.jdbc.entity;
+package model.db.entity;
 
 import java.sql.Date;
 
@@ -8,6 +8,7 @@ public class Exhibition {
     private Date date;
     private String theme;
     private String about;
+    private String longAbout;
     private double price;
     private String image;
 
@@ -97,6 +98,14 @@ public class Exhibition {
 
     public void setAbout(String about) {
         this.about = about;
+    }
+
+    public String getLongAbout() {
+        return longAbout;
+    }
+
+    public void setLongAbout(String longAbout) {
+        this.longAbout = longAbout;
     }
 
     public double getPrice() {

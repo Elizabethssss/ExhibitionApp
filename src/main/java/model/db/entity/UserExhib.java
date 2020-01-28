@@ -1,8 +1,9 @@
-package model.jdbc.entity;
+package model.db.entity;
 
 public class UserExhib {
     private long userId;
     private long exhibitionId;
+    private boolean isBought;
 
     public long getUserId() {
         return userId;
@@ -18,5 +19,13 @@ public class UserExhib {
 
     public void setExhibitionId(long exhibitionId) {
         this.exhibitionId = exhibitionId;
+    }
+
+    public boolean isBought() {
+        return isBought;
+    }
+
+    public void setBought(boolean bought) {
+        isBought = bought;
     }
 }

@@ -1,12 +1,12 @@
-package model.jdbc.dao;
+package model.db.dao;
 
-import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public interface GenericDao<T> {
     boolean add(T object);
-    T getById(long id);
+    Optional<T> getById(long id);
     boolean update(T object);
     boolean delete(T object);
-    List<T> getAll() throws SQLException;
+    List<T> getAll();
 }

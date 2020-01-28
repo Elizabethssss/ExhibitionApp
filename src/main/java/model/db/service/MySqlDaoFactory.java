@@ -1,34 +1,40 @@
-package model.jdbc.service;
+package model.db.service;
 
-import model.jdbc.dao.GenericDao;
-import model.jdbc.entity.Exhibition;
-import model.jdbc.entity.User;
-import model.jdbc.entity.UserExhib;
+import model.db.dao.GenericDao;
+import model.db.entity.Exhibition;
+import model.db.entity.User;
+import model.db.entity.UserExhib;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-class MySqlDaoFactory {
-    public static final String driver = "com.mysql.cj.jdbc.Driver";
-    public static final String url = "jdbc:mysql://localhost:3306/aliens?useSSL=false";
-    public static final String user = "root";
-    public static final String password = "12345";
+public class MySqlDaoFactory {
+    static final Logger logger = Logger.getLogger(MySqlDaoFactory.class);
 
-    MySqlDaoFactory() {
+    public static final String DRIVER = "com.mysql.cj.jdbc.Driver";
+    public static final String URL = "jdbc:mysql://localhost:3306/aliens?useSSL=false";
+    public static final String USER = "root";
+    public static final String PASSWORD = "12345";
+
+    static {
         try {
-            Class.forName(driver);
+            Class.forName(DRIVER);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            logger.error("Can't get driver", e);
         }
+    }
+
+    private MySqlDaoFactory() {
     }
 
     public static Connection getConnection() {
         Connection connection = null;
         try {
-            connection = DriverManager.getConnection(url, user, password);
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Can't connect to db", e);
         }
         return  connection;
     }

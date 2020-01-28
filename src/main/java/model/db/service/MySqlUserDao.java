@@ -1,7 +1,8 @@
-package model.jdbc.service;
+package model.db.service;
 
-import model.jdbc.dao.AbstractDao;
-import model.jdbc.entity.User;
+import model.db.dao.AbstractDao;
+import model.db.entity.User;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,10 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MySqlUserDao extends AbstractDao<User> {
+    static final Logger logger = Logger.getLogger(MySqlUserDao.class);
+
+    public MySqlUserDao(Connection connection) {
+        super(connection);
+    }
+
     @Override
     protected String getInsertQuery() {
-        return "INSERT INTO user (username, email, password)\n" +
-                "VALUES (?, ?, ?);";
+        return "INSERT INTO user VALUES (DEFAULT, ?, ?, ?);";
     }
 
     @Override
@@ -46,7 +52,7 @@ public class MySqlUserDao extends AbstractDao<User> {
                 result.add(temp);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Can't parse user result set", e);
         }
         return result;
     }
@@ -63,7 +69,7 @@ public class MySqlUserDao extends AbstractDao<User> {
         try {
             setData(statement, object);
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Can't prepare user statement for insert", e);
         }
     }
 
@@ -73,7 +79,7 @@ public class MySqlUserDao extends AbstractDao<User> {
             setData(statement, object);
             statement.setLong(4, object.getId());
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Can't prepare user statement for update", e);
         }
     }
 
@@ -82,11 +88,7 @@ public class MySqlUserDao extends AbstractDao<User> {
         try {
             statement.setLong(1, object.getId());
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Can't prepare user statement for delete", e);
         }
-    }
-
-    public MySqlUserDao(Connection connection) {
-        super(connection);
     }
 }

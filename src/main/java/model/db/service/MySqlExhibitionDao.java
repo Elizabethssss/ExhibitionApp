@@ -1,7 +1,8 @@
-package model.jdbc.service;
+package model.db.service;
 
-import model.jdbc.dao.AbstractDao;
-import model.jdbc.entity.Exhibition;
+import model.db.dao.AbstractDao;
+import model.db.entity.Exhibition;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,10 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MySqlExhibitionDao extends AbstractDao<Exhibition> {
+    static final Logger logger = Logger.getLogger(MySqlExhibitionDao.class);
+
+    public MySqlExhibitionDao(Connection connection) {
+        super(connection);
+    }
 
     @Override
     protected String getInsertQuery() {
-        return "INSERT INTO exhibition VALUES(DEFAULT, ?, ?, ?, ?, ?, ?);";
+        return "INSERT INTO exhibition VALUES(DEFAULT, ?, ?, ?, ?, ?, ?, ?);";
     }
 
     @Override
@@ -24,7 +30,7 @@ public class MySqlExhibitionDao extends AbstractDao<Exhibition> {
 
     @Override
     protected String getUpdateQuery() {
-        return "UPDATE exhibition SET name = ?, date = ?, theme = ?, about = ?, price = ?, image = ?\n" +
+        return "UPDATE exhibition SET name = ?, date = ?, theme = ?, about = ?, long_about = ?, price = ?, image = ?\n" +
                 "WHERE id= ?;";
     }
 
@@ -44,12 +50,13 @@ public class MySqlExhibitionDao extends AbstractDao<Exhibition> {
                 temp.setDate(rs.getDate("date"));
                 temp.setTheme(rs.getString("theme"));
                 temp.setAbout(rs.getString("about"));
+                temp.setLongAbout(rs.getString("long_about"));
                 temp.setPrice(rs.getDouble("price"));
                 temp.setImage(rs.getString("image"));
                 result.add(temp);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Can't parse exhibition result set", e);
         }
         return result;
     }
@@ -59,7 +66,7 @@ public class MySqlExhibitionDao extends AbstractDao<Exhibition> {
         try {
             setData(statement, object);
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Can't prepare exhibition statement for insert", e);
         }
     }
 
@@ -69,17 +76,18 @@ public class MySqlExhibitionDao extends AbstractDao<Exhibition> {
         statement.setDate(2, object.getDate());
         statement.setString(3, object.getTheme());
         statement.setString(4, object.getAbout());
-        statement.setDouble(5, object.getPrice());
-        statement.setString(6, object.getImage());
+        statement.setString(5, object.getLongAbout());
+        statement.setDouble(6, object.getPrice());
+        statement.setString(7, object.getImage());
     }
 
     @Override
     protected void prepareStatementForUpdate(PreparedStatement statement, Exhibition object) {
         try {
             setData(statement, object);
-            statement.setLong(7, object.getId());
+            statement.setLong(8, object.getId());
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Can't prepare exhibition statement for update", e);
         }
     }
 
@@ -88,11 +96,7 @@ public class MySqlExhibitionDao extends AbstractDao<Exhibition> {
         try {
             statement.setLong(1, object.getId());
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Can't prepare exhibition statement for delete", e);
         }
-    }
-
-    public MySqlExhibitionDao(Connection connection) {
-        super(connection);
     }
 }
