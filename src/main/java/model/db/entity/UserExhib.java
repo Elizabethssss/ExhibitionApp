@@ -1,9 +1,18 @@
 package model.db.entity;
 
 public class UserExhib {
+    private long id;
     private long userId;
     private long exhibitionId;
     private boolean isBought;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public long getUserId() {
         return userId;

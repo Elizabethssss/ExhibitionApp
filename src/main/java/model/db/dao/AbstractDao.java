@@ -1,6 +1,7 @@
 package model.db.dao;
 
 import org.apache.log4j.Logger;
+import utility.CollectionUtility;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+
+import static utility.CollectionUtility.nullSafeListInitialize;
 
 public abstract class AbstractDao<T> implements GenericDao<T> {
     private Connection connection;
@@ -70,7 +73,7 @@ public abstract class AbstractDao<T> implements GenericDao<T> {
 
     @Override
     public Optional<T> getById(long id) {
-        List<T> list = null;
+        List<T> list = nullSafeListInitialize(null);
         String sql = getSelectQuery();
         sql += " WHERE id = ?;";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -80,7 +83,7 @@ public abstract class AbstractDao<T> implements GenericDao<T> {
         } catch (SQLException e) {
             logger.error("Error in getting by id from db", e);
         }
-        if (list == null || list.isEmpty()) {
+        if (list.isEmpty()) {
             return Optional.empty();
         }
 
@@ -89,7 +92,7 @@ public abstract class AbstractDao<T> implements GenericDao<T> {
 
     @Override
     public List<T> getAll() {
-        List<T> list = null;
+        List<T> list = nullSafeListInitialize(null);
         String sql = getSelectQuery();
         try(PreparedStatement ps = connection.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();

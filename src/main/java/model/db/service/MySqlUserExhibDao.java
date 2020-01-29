@@ -35,7 +35,7 @@ public class MySqlUserExhibDao extends AbstractDao<UserExhib> {
 
     @Override
     protected String getDeleteQuery() {
-        return "DELETE FROM user_exhib WHERE user_id = ? AND exhibition_id = ?;";
+        return "DELETE FROM user_exhib WHERE id = ?;";
     }
 
     @Override
@@ -44,6 +44,7 @@ public class MySqlUserExhibDao extends AbstractDao<UserExhib> {
         try {
             while (rs.next()) {
                 UserExhib temp = new UserExhib();
+                temp.setId(rs.getLong("id"));
                 temp.setUserId(rs.getLong("user_id"));
                 temp.setExhibitionId(rs.getLong("exhibition_id"));
                 temp.setBought(rs.getBoolean("is_bought"));
@@ -83,8 +84,7 @@ public class MySqlUserExhibDao extends AbstractDao<UserExhib> {
     @Override
     protected void prepareStatementForDelete(PreparedStatement statement, UserExhib object) {
         try {
-            statement.setLong(1, object.getUserId());
-            statement.setLong(2, object.getExhibitionId());
+            statement.setLong(1, object.getId());
         } catch (SQLException e) {
             logger.error("Can't prepare user_exhib statement for delete", e);
         }
