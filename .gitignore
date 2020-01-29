@@ -2,6 +2,6 @@
 target
 *.iml
 out
-resources
+
 logs
 lib

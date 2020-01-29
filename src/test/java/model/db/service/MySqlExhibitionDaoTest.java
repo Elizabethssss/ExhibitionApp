@@ -12,6 +12,7 @@ import java.sql.Date;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -60,9 +61,9 @@ public class MySqlExhibitionDaoTest {
 
     @Test
     public void getById() {
-        Exhibition exhibition;
+        Optional<Exhibition> exhibition;
         temp.setId(2);
-        exhibition = (Exhibition) dao.getById(temp.getId());
+        exhibition = dao.getById(temp.getId());
         assertNotNull(exhibition);
     }
 
