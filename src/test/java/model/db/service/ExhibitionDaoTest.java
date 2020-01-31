@@ -1,6 +1,7 @@
 package model.db.service;
 
 import model.db.dao.GenericDao;
+import model.db.dao.impl.DaoFactory;
 import model.db.entity.Exhibition;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +19,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(Parameterized.class)
-public class MySqlExhibitionDaoTest {
+public class ExhibitionDaoTest {
     Exhibition temp;
     Connection con;
     GenericDao dao;
@@ -35,8 +36,8 @@ public class MySqlExhibitionDaoTest {
 
     @Before
     public void init() throws Exception {
-        con = MySqlDaoFactory.getConnection();
-        dao = MySqlDaoFactory.getDao(con, clazz);
+        con = DaoFactory.getConnection();
+        dao = DaoFactory.getDao(con, clazz);
 
         temp = new Exhibition();
         temp.setName("a");

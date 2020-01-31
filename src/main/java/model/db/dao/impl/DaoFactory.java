@@ -1,4 +1,4 @@
-package model.db.service;
+package model.db.dao.impl;
 
 import model.db.dao.GenericDao;
 import model.db.entity.Exhibition;
@@ -10,8 +10,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class MySqlDaoFactory {
-    static final Logger logger = Logger.getLogger(MySqlDaoFactory.class);
+public class DaoFactory {
+    private static final Logger logger = Logger.getLogger(DaoFactory.class);
 
     public static final String DRIVER = "com.mysql.cj.jdbc.Driver";
     public static final String URL = "jdbc:mysql://localhost:3306/aliens?useSSL=false";
@@ -26,7 +26,7 @@ public class MySqlDaoFactory {
         }
     }
 
-    private MySqlDaoFactory() {
+    private DaoFactory() {
     }
 
     public static Connection getConnection() {
@@ -41,13 +41,13 @@ public class MySqlDaoFactory {
 
     public static GenericDao getDao(Connection connection, Class<?> clazz) {
         if(clazz == Exhibition.class)
-            return new MySqlExhibitionDao(connection);
+            return new ExhibitionDao(connection);
         else if(clazz == User.class)
-            return new MySqlUserDao(connection);
+            return new UserDao(connection);
         else if(clazz == Exhibition.Exposition.class)
-            return new MySqlExpositionDao(connection);
+            return new ExpositionDao(connection);
         else if(clazz == UserExhib.class)
-            return new MySqlUserExhibDao(connection);
+            return new UserExhibDao(connection);
         return null;
     }
 }

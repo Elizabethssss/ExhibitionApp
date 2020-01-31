@@ -1,7 +1,6 @@
 package model.db.dao;
 
 import org.apache.log4j.Logger;
-import utility.CollectionUtility;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,24 +12,25 @@ import java.util.Optional;
 import static utility.CollectionUtility.nullSafeListInitialize;
 
 public abstract class AbstractDao<T> implements GenericDao<T> {
+    private static final Logger logger = Logger.getLogger(AbstractDao.class);
     private Connection connection;
-    static final Logger logger = Logger.getLogger(AbstractDao.class);
-
-    protected abstract String getInsertQuery();
-    protected abstract String getSelectQuery();
-    protected abstract String getUpdateQuery();
-    protected abstract String getDeleteQuery();
-
-    protected abstract List<T> parseResultSet(ResultSet rs);
-    protected abstract void setData(PreparedStatement statement, T object) throws SQLException;
-
-    protected abstract void prepareStatementForInsert(PreparedStatement statement, T object);
-    protected abstract void prepareStatementForUpdate(PreparedStatement statement, T object);
-    protected abstract void prepareStatementForDelete(PreparedStatement statement, T object);
 
     public AbstractDao(Connection connection) {
         this.connection = connection;
     }
+
+    protected abstract String getInsertQuery();
+    protected abstract String getSelectQuery();
+    protected abstract String getUpdateQuery();
+
+    protected abstract String getDeleteQuery();
+    protected abstract List<T> parseResultSet(ResultSet rs);
+
+    protected abstract void setData(PreparedStatement statement, T object) throws SQLException;
+    protected abstract void prepareStatementForInsert(PreparedStatement statement, T object);
+    protected abstract void prepareStatementForUpdate(PreparedStatement statement, T object);
+
+    protected abstract void prepareStatementForDelete(PreparedStatement statement, T object);
 
     @Override
     public boolean add(T object) {

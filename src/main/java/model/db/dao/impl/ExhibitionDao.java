@@ -1,4 +1,4 @@
-package model.db.service;
+package model.db.dao.impl;
 
 import model.db.dao.AbstractDao;
 import model.db.entity.Exhibition;
@@ -11,10 +11,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MySqlExhibitionDao extends AbstractDao<Exhibition> {
-    static final Logger logger = Logger.getLogger(MySqlExhibitionDao.class);
+public class ExhibitionDao extends AbstractDao<Exhibition> {
+    private static final Logger logger = Logger.getLogger(ExhibitionDao.class);
 
-    public MySqlExhibitionDao(Connection connection) {
+    public ExhibitionDao(Connection connection) {
         super(connection);
     }
 
