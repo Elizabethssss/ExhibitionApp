@@ -11,10 +11,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExhibitionDao extends AbstractDao<Exhibition> {
-    private static final Logger logger = Logger.getLogger(ExhibitionDao.class);
+public class ExhibitionDaoImpl extends AbstractDao<Exhibition> {
+    private static final Logger logger = Logger.getLogger(ExhibitionDaoImpl.class);
 
-    public ExhibitionDao(Connection connection) {
+    public ExhibitionDaoImpl(Connection connection) {
         super(connection);
     }
 
@@ -37,6 +37,11 @@ public class ExhibitionDao extends AbstractDao<Exhibition> {
     @Override
     protected String getDeleteQuery() {
         return "DELETE FROM exhibition WHERE id=?;";
+    }
+
+    @Override
+    protected String getFindByParamQuery() {
+        return "SELECT * FROM exhibition WHERE date LIKE ?;";
     }
 
     @Override
@@ -64,14 +69,14 @@ public class ExhibitionDao extends AbstractDao<Exhibition> {
     @Override
     protected void prepareStatementForInsert(PreparedStatement statement, Exhibition object) {
         try {
-            setData(statement, object);
+            prepareData(statement, object);
         } catch (SQLException e) {
             logger.error("Can't prepare exhibition statement for insert", e);
         }
     }
 
     @Override
-    protected void setData(PreparedStatement statement, Exhibition object) throws SQLException {
+    protected void prepareData(PreparedStatement statement, Exhibition object) throws SQLException {
         statement.setString(1, object.getName());
         statement.setDate(2, object.getDate());
         statement.setString(3, object.getTheme());
@@ -84,7 +89,7 @@ public class ExhibitionDao extends AbstractDao<Exhibition> {
     @Override
     protected void prepareStatementForUpdate(PreparedStatement statement, Exhibition object) {
         try {
-            setData(statement, object);
+            prepareData(statement, object);
             statement.setLong(8, object.getId());
         } catch (SQLException e) {
             logger.error("Can't prepare exhibition statement for update", e);
@@ -92,9 +97,9 @@ public class ExhibitionDao extends AbstractDao<Exhibition> {
     }
 
     @Override
-    protected void prepareStatementForDelete(PreparedStatement statement, Exhibition object) {
+    protected void prepareStatementForDelete(PreparedStatement statement, long id) {
         try {
-            statement.setLong(1, object.getId());
+            statement.setLong(1, id);
         } catch (SQLException e) {
             logger.error("Can't prepare exhibition statement for delete", e);
         }

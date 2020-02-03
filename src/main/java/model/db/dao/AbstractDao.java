@@ -22,15 +22,15 @@ public abstract class AbstractDao<T> implements GenericDao<T> {
     protected abstract String getInsertQuery();
     protected abstract String getSelectQuery();
     protected abstract String getUpdateQuery();
-
     protected abstract String getDeleteQuery();
+    protected abstract String getFindByParamQuery();
+
     protected abstract List<T> parseResultSet(ResultSet rs);
 
-    protected abstract void setData(PreparedStatement statement, T object) throws SQLException;
+    protected abstract void prepareData(PreparedStatement statement, T object) throws SQLException;
     protected abstract void prepareStatementForInsert(PreparedStatement statement, T object);
     protected abstract void prepareStatementForUpdate(PreparedStatement statement, T object);
-
-    protected abstract void prepareStatementForDelete(PreparedStatement statement, T object);
+    protected abstract void prepareStatementForDelete(PreparedStatement statement, long id);
 
     @Override
     public boolean add(T object) {
@@ -59,10 +59,10 @@ public abstract class AbstractDao<T> implements GenericDao<T> {
     }
 
     @Override
-    public boolean delete(T object) {
+    public boolean delete(long id) {
         String sql = getDeleteQuery();
         try(PreparedStatement ps = connection.prepareStatement(sql)) {
-            prepareStatementForDelete(ps, object);
+            prepareStatementForDelete(ps, id);
             ps.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -83,11 +83,8 @@ public abstract class AbstractDao<T> implements GenericDao<T> {
         } catch (SQLException e) {
             logger.error("Error in getting by id from db", e);
         }
-        if (list.isEmpty()) {
-            return Optional.empty();
-        }
 
-        return (Optional<T>) list.iterator().next();
+        return Optional.ofNullable(list.iterator().next());
     }
 
     @Override
@@ -100,6 +97,21 @@ public abstract class AbstractDao<T> implements GenericDao<T> {
         } catch (SQLException e) {
             logger.error("Error in getting all in db", e);
         }
+        return list;
+    }
+
+    @Override
+    public List<T> findByParam(Object param) {
+        List<T> list = nullSafeListInitialize(null);
+        String sql = getFindByParamQuery();
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setObject(1, param);
+            ResultSet rs = ps.executeQuery();
+            list = parseResultSet(rs);
+        } catch (SQLException e) {
+            logger.error("Error in getting by parameter from db", e);
+        }
+
         return list;
     }
 

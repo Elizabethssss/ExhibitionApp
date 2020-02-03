@@ -1,6 +1,8 @@
 package model.db.dao.impl;
 
 import model.db.dao.AbstractDao;
+import model.db.dao.Page;
+import model.db.dao.PageableDao;
 import model.db.entity.Exhibition;
 import org.apache.log4j.Logger;
 
@@ -11,10 +13,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExpositionDao extends AbstractDao<Exhibition.Exposition> {
-    private static final Logger logger = Logger.getLogger(ExpositionDao.class);
+import static utility.CollectionUtility.nullSafeListInitialize;
 
-    public ExpositionDao(Connection connection) {
+public class ExpositionDaoImpl extends AbstractDao<Exhibition.Exposition> implements PageableDao<Exhibition.Exposition> {
+    private static final Logger logger = Logger.getLogger(ExpositionDaoImpl.class);
+
+    public ExpositionDaoImpl(Connection connection) {
         super(connection);
     }
 
@@ -40,6 +44,15 @@ public class ExpositionDao extends AbstractDao<Exhibition.Exposition> {
     }
 
     @Override
+    protected String getFindByParamQuery() {
+        return "SELECT * FROM exposition WHERE exhib_id = ?;";
+    }
+
+    private String getSelectPaginationQuery() {
+        return "SELECT * FROM exposition WHERE exhib_id = ? LIMIT ? OFFSET ?;";
+    }
+
+    @Override
     protected List<Exhibition.Exposition> parseResultSet(ResultSet rs) {
         List<Exhibition.Exposition> result = new ArrayList<>();
         try {
@@ -59,7 +72,7 @@ public class ExpositionDao extends AbstractDao<Exhibition.Exposition> {
     }
 
     @Override
-    protected void setData(PreparedStatement statement, Exhibition.Exposition object) throws SQLException {
+    protected void prepareData(PreparedStatement statement, Exhibition.Exposition object) throws SQLException {
         statement.setString(1, object.getName());
         statement.setString(2, object.getAbout());
         statement.setString(3, object.getImage());
@@ -69,7 +82,7 @@ public class ExpositionDao extends AbstractDao<Exhibition.Exposition> {
     @Override
     protected void prepareStatementForInsert(PreparedStatement statement, Exhibition.Exposition object) {
         try {
-            setData(statement, object);
+            prepareData(statement, object);
         } catch (SQLException e) {
             logger.error("Can't prepare exposition statement for insert", e);
         }
@@ -78,7 +91,7 @@ public class ExpositionDao extends AbstractDao<Exhibition.Exposition> {
     @Override
     protected void prepareStatementForUpdate(PreparedStatement statement, Exhibition.Exposition object) {
         try {
-            setData(statement, object);
+            prepareData(statement, object);
             statement.setLong(5, object.getId());
         } catch (SQLException e) {
             logger.error("Can't prepare exposition statement for update", e);
@@ -86,11 +99,27 @@ public class ExpositionDao extends AbstractDao<Exhibition.Exposition> {
     }
 
     @Override
-    protected void prepareStatementForDelete(PreparedStatement statement, Exhibition.Exposition object) {
+    protected void prepareStatementForDelete(PreparedStatement statement, long id) {
         try {
-            statement.setLong(1, object.getId());
+            statement.setLong(1, id);
         } catch (SQLException e) {
             logger.error("Can't prepare exposition statement for delete", e);
         }
+    }
+
+    @Override
+    public List<Exhibition.Exposition> findAll(long id, Page page, Connection connection) {
+        List<Exhibition.Exposition> list = nullSafeListInitialize(null);
+        String sql = getSelectPaginationQuery();
+        try(PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setLong(1, id);
+            ps.setLong(2, page.getRecordNumber());
+            ps.setLong(3, page.getPageNumber());
+            ResultSet rs = ps.executeQuery();
+            list = parseResultSet(rs);
+        } catch (SQLException e) {
+            logger.error("Error in getting all in db", e);
+        }
+        return list;
     }
 }
