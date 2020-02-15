@@ -19,36 +19,22 @@
 </head>
 <body>
 
-<header>
-  <div class="container">
-    <div class="header__inner">
-      <div class="logo">
-        <h1><a href="#"><i class="fas fa-crown"></i> Elizabeth!!!</a></h1>
-      </div>
-      <nav id="main__menu">
-        <ul>
-          <li class="hello">Hello, <span class="user-name">${username}</span> !</li>
-          <a href="myProfile?page=0" class="btn">My profile</a>
-          <a href="purchase" class="btn">${inCart} <i class="fas fa-shopping-basket"></i></a>
-          <a href="logout" class="btn">Log out</a>
-        </ul>
-      </nav>
-    </div>
-  </div>
-</header>
+<jsp:include page="commons/header.jsp"/>
+<%--  <jsp:param name="inCart" value="${inCart}"/>--%>
+<%--</jsp:include>--%>
 
 <main>
   <section>
     <div class="container">
-      <div class="theme">
-        <select>
-          <option value="1">Sec 1</option>
-          <option value="2">Sec 2</option>
-          <option value="3">Sec 3</option>
-          <option value="4">Sec 4</option>
-          <option value="5">Sec 5</option>
-        </select>
-      </div>
+<%--      <div class="theme">--%>
+<%--        <select>--%>
+<%--          <option value="1">Sec 1</option>--%>
+<%--          <option value="2">Sec 2</option>--%>
+<%--          <option value="3">Sec 3</option>--%>
+<%--          <option value="4">Sec 4</option>--%>
+<%--          <option value="5">Sec 5</option>--%>
+<%--        </select>--%>
+<%--      </div>--%>
 
       <c:forEach var="month" items="${exhibMap.keySet()}">
       <div class="exposition">
@@ -59,14 +45,14 @@
             </c:if>
         </div>
         <c:forEach var="exhib" items="${exhibMap.get(month)}">
-          <a class="exhib-card" href="exhibition?id=${exhib.getId()}&page=0">
+          <a class="exhib-card" href="exhibition?id=${exhib.getId()}&page=1">
           <div class="descriptions">
             <div class="expo__photo">
               <img src="${exhib.getImage()}" alt="exposition photo" class="img150">
             </div>
             <div class="description">
               <p class="nameExhib">${exhib.getName()}</p>
-              <p><span>Date: </span> ${exhib.getDate()}</p>
+              <p><span>Date: </span> ${exhib.getDateFrom()} — ${exhib.getDateTo()}</p>
               <p><span>Theme: </span> ${exhib.getTheme()}</p>
               <p><span>About: </span>${exhib.getAbout()}</p>
               <p><span>Price: </span> ${exhib.getPrice()} UAH</p>
@@ -78,13 +64,7 @@
       </div>
       </c:forEach>
 
-
-
-      <footer>
-        <div class="footer__inner">
-          &copy; Valteris Elizabeth 2020
-        </div>
-      </footer>
+      <jsp:include page="commons/footer.jsp"/>
     </div>
   </section>
 </main>

@@ -102,11 +102,12 @@ public abstract class AbstractDao<T> implements GenericDao<T> {
         return Optional.empty();
     }
 
-    protected List<T> findAll(Page page, String query) {
+    protected List<T> findAll(Long id, Page page, String query) {
         try(Connection connection = connector.getConnection();
             PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setInt(1, page.getPageNumber());
+            ps.setLong(1, id);
             ps.setInt(2, page.getRecordNumber());
+            ps.setInt(3, page.getPageNumber());
             try(final ResultSet rs = ps.executeQuery()) {
                 List<T> list = new ArrayList<>();
                 while (rs.next()) {
@@ -117,6 +118,23 @@ public abstract class AbstractDao<T> implements GenericDao<T> {
         } catch (SQLException e) {
             logger.error("Error in getting all from db", e);
             throw new DataBaseException("Error in getting all from db", e);
+        }
+    }
+
+    public int count(Long id, String query) {
+        try(Connection connection = connector.getConnection();
+            PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setLong(1, id);
+            try(final ResultSet rs = ps.executeQuery()) {
+                int count = 0;
+                while (rs.next()) {
+                    count= rs.getInt(1);
+                }
+                return count;
+            }
+        } catch (SQLException e) {
+            logger.error("Error in counting elements in db", e);
+            throw new DataBaseException("Error in counting elements in db", e);
         }
     }
 

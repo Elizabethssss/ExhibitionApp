@@ -5,14 +5,14 @@ public class UserEntity {
     private final String username;
     private final String email;
     private final String password;
-    private final RoleEntity roleEntity;
+    private final Integer roleId;
 
     private UserEntity(Builder builder) {
         this.id = builder.id;
         this.username = builder.username;
         this.email = builder.email;
         this.password = builder.password;
-        this.roleEntity = builder.roleEntity;
+        this.roleId = builder.roleId;
     }
 
     public long getId() {
@@ -31,8 +31,8 @@ public class UserEntity {
         return password;
     }
 
-    public RoleEntity getRoleEntity() {
-        return roleEntity;
+    public Integer getRoleId() {
+        return roleId;
     }
 
     public static Builder builder() { return new Builder(); }
@@ -42,7 +42,7 @@ public class UserEntity {
         private String username;
         private String email;
         private String password;
-        private RoleEntity roleEntity;
+        private Integer roleId;
 
         private Builder() {}
 
@@ -66,8 +66,8 @@ public class UserEntity {
             return this;
         }
 
-        public Builder withRole(RoleEntity roleEntity) {
-            this.roleEntity = roleEntity;
+        public Builder withRoleId(Integer roleId) {
+            this.roleId = roleId;
             return this;
         }
 

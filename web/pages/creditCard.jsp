@@ -11,32 +11,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+          content="width=device-width, userEntity-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="../styles/purchase.css">
     <script src="https://kit.fontawesome.com/9549242389.js" crossorigin="anonymous"></script>
     <title>Credit Card</title>
 </head>
 <body>
-<header>
-    <div class="container">
-        <div class="header__inner">
-            <div class="logo">
-                <h1><a href="index"><i class="fas fa-crown"></i> Elizabeth!!!</a></h1>
-            </div>
-            <nav id="main__menu">
-                <ul>
-                    <li class="hello">Hello, <span class="user-name">${username}</span> !</li>
-                    <a href="myProfile?page=0" class="pay-btn">My profile</a>
-                    <a href="purchase" class="pay-btn">${inCart} <i class="fas fa-shopping-basket"></i></a>
-                    <a href="logout" class="pay-btn">Log out</a>
-                </ul>
-            </nav>
-        </div>
-    </div>
-</header>
 
-<section class="alert alert-success ${message == null ? 'hide':''}" role="alert">
+<jsp:include page="commons/header.jsp"/>
+
+<section class="alert alert-success ${message == null ? 'hide':''}" roleEntity="alert">
     ${message}
 </section>
 
@@ -63,12 +48,13 @@
                                 <input type="password" id="cvv" name="cardCVV" class="${errorPassword?'error':''}">
                             </div>
                             <div class="card-front">
-                                <i class="fas fa-piggy-bank card-icon"></i>
+                                <em class="fas fa-piggy-bank card-icon"></em>
                                 <h2 class="card-name">Elizabeth Bank</h2>
-                                <i class="fab fa-cc-visa card-logo-visa"></i>
-                                <i class="fab fa-cc-mastercard card-logo-mc"></i>
+                                <em class="fab fa-cc-visa card-logo-visa"></em>
+                                <em class="fab fa-cc-mastercard card-logo-mc"></em>
                                 <input type="text" id="card-number" name="cardNumber" class="${errorNumber?'error':''}"
-                                       value="${cardNumber}">
+                                       value="378282246310005">
+<%--                                       value="${cardNumber}">--%>
                                 <input type="text" id="card-to-month" name="cardMonth" class="${errorDate?'error':''}"
                                        value="${cardMonth}">
                                 <input type="text" id="card-to-year" name="cardYear" class="${errorDate?'error':''}"
@@ -85,11 +71,7 @@
                     </div>
                 </div>
             </form>
-            <footer>
-                <div class="footer__inner">
-                    &copy; Valteris Elizabeth 2020
-                </div>
-            </footer>
+            <jsp:include page="commons/footer.jsp"/>
         </div>
     </section>
 </main>

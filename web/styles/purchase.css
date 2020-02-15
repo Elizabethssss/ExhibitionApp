@@ -259,7 +259,7 @@ main{
     margin-bottom: 10px;
 }
 
-.pay-btn{
+.pay-btn, .btn{
     width: 140px;
     height: 40px;
     border: none;

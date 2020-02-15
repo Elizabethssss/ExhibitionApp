@@ -24,11 +24,13 @@ public class TicketDaoImpl extends AbstractDao<TicketEntity> implements TicketDa
     public static final String FIND_BY_USER_ID_AND_BOUGHT_QUERY = "SELECT * FROM ticket WHERE user_id = ? AND is_bought = ?;";
     public static final String FIND_PAGE_BY_USER_ID_QUERY = "SELECT * FROM ticket " +
             "WHERE user_id = ? AND is_bought = 1 LIMIT ? OFFSET ?;";
+    //TODO: count all query
+    public static final String COUNT_ALL_QUERY = "";
+
 
     public TicketDaoImpl(HikariCPManager connector) {
         super(connector, SAVE_QUERY, UPDATE_QUERY, DELETE_QUERY, FIND_BY_ID_QUERY);
     }
-
 
     @Override
     public List<TicketEntity> findByUserIdAndIsBought(Long userId, boolean isBought) {
@@ -50,8 +52,13 @@ public class TicketDaoImpl extends AbstractDao<TicketEntity> implements TicketDa
     }
 
     @Override
-    public List<TicketEntity> findAll(Page page) {
-        return findAll(page, FIND_PAGE_BY_USER_ID_QUERY);
+    public List<TicketEntity> findAll(Long id, Page page) {
+        return findAll(id, page, FIND_PAGE_BY_USER_ID_QUERY);
+    }
+
+    @Override
+    public int count(Long id) {
+        return count(id, COUNT_ALL_QUERY);
     }
 
     @Override

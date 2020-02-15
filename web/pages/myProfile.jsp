@@ -20,23 +20,7 @@
 </head>
 <body>
 
-<header>
-    <div class="container">
-        <div class="header__inner">
-            <div class="logo">
-                <h1><a href="index"><i class="fas fa-crown"></i> Elizabeth!!!</a></h1>
-            </div>
-            <nav id="main__menu">
-                <ul>
-                    <li class="hello">Hello, <span class="user-name">${username}</span> !</li>
-                    <a href="" class="btn">My profile</a>
-                    <a href="purchase" class="btn">${inCart} <i class="fas fa-shopping-basket"></i></a>
-                    <a href="logout" class="btn">Log out</a>
-                </ul>
-            </nav>
-        </div>
-    </div>
-</header>
+<jsp:include page="commons/header.jsp"/>
 
 <main>
     <section>
@@ -52,7 +36,7 @@
             <div class="title">
                 <h1>Your Tickets:</h1>
             </div>
-            <section ${requestScope.ticketsMap.isEmpty()?'':'hidden'} class="alert alert-warning" role="alert">
+            <section ${requestScope.ticketsMap.isEmpty()?'':'hidden'} class="alert alert-warning" roleEntity="alert">
                 You haven't bought tickets yet!
             </section>
             <c:forEach var="key" items="${ticketsMap.keySet()}">
@@ -63,7 +47,7 @@
                     </div>
                     <div class="description">
                         <p class="nameExhib">${exhib.get().getName()}</p>
-                        <p><span>Date: </span> ${exhib.get().getDate()}</p>
+                        <p><span>Date: </span> ${exhib.get().getDateFrom()}</p>
                         <p><span>Theme: </span> ${exhib.get().getTheme()}</p>
                         <p><span>About: </span>${exhib.get().getAbout()}</p>
                         <p><span>Price: </span> ${exhib.get().getPrice()} UAH</p>
@@ -73,19 +57,14 @@
             </c:forEach>
             <div class="next-previous">
                 <div class="previous">
-                    <a class="next-previous-btn ${page<=0?'hide':''}" href="myProfile?page=${page-1}">Previous</a>
+                    <a class="next-previous-btn ${pageNumber<=1?'hide':''}" href="profile?page=${pageNumber-1}">Previous</a>
                 </div>
                 <div class="next">
-                    <a class="next-previous-btn ${(numberOfTickets<=(page+1)*5)?'hide':''}" href="myProfile?page=${page+1}">Next</a>
+                    <a class="next-previous-btn ${(numberOfTickets<=(pageNumber*5))?'hide':''}" href="profile?page=${pageNumber+1}">Next</a>
                 </div>
             </div>
 
-
-            <footer>
-                <div class="footer__inner">
-                    &copy; Valteris Elizabeth 2020
-                </div>
-            </footer>
+            <jsp:include page="commons/footer.jsp"/>
         </div>
     </section>
 </main>

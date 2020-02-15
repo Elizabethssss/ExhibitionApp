@@ -5,14 +5,14 @@
   Time: 9:02 PM
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+          content="width=device-width, userEntity-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="../styles/exposition.css">
     <script src="https://kit.fontawesome.com/9549242389.js" crossorigin="anonymous"></script>
@@ -20,25 +20,9 @@
 </head>
 <body>
 
-<header>
-    <div class="container">
-        <div class="header__inner">
-            <div class="logo">
-                <h1><a href="index"><i class="fas fa-crown"></i> Elizabeth!!!</a></h1>
-            </div>
-            <nav id="main__menu">
-                <ul>
-                    <li class="hello">Hello, <span class="user-name">${username}</span> !</li>
-                    <a href="myProfile?page=0" class="next-previous-btn">My profile</a>
-                    <a href="purchase" class="next-previous-btn">${inCart} <i class="fas fa-shopping-basket"></i></a>
-                    <a href="logout" class="next-previous-btn">Log out</a>
-                </ul>
-            </nav>
-        </div>
-    </div>
-</header>
+<jsp:include page="commons/header.jsp"/>
 
-<section class="alert alert-success ${message == null ? 'hide':''}" role="alert">
+<section class="alert alert-success ${message == null ? 'hide':''}" roleEntity="alert">
     ${message}
 </section>
 
@@ -53,14 +37,14 @@
                 </ul>
             </div>
 
-            <form action="buying?id=${exhib.get().getId()}&page=${page}" method="post">
+            <form action="buying?id=${exhib.get().getId()}&page=${pageNumber}" method="post">
                 <div class="show">
                     <div class="show__photo">
                         <img src="${exhib.get().getImage()}" alt="exposition photo">
                     </div>
                     <div class="description">
                         <p class="nameExhib">${exhib.get().getName()}</p>
-                        <p><span>Date: </span> ${exhib.get().getDate()}</p>
+                        <p><span>Date: </span> ${exhib.get().getDateFrom()}</p>
                         <p><span>Theme: </span> ${exhib.get().getTheme()}</p>
                         <p><span>About: </span>${exhib.get().getAbout()} ${exhib.get().getLongAbout()}</p>
                         <p><span>Price: </span> ${exhib.get().getPrice()} UAH</p>
@@ -73,15 +57,15 @@
                 <h1>List of Expositions:</h1>
             </div>
 
-            <c:forEach var="expositoion" items="${expositions}">
-                <div class="expositions">
+            <c:forEach var="exposition" items="${expositions}">
+                <div class="expositionEntities">
                     <div class="exposition">
                         <div class="expo__photo">
-                            <img src="${expositoion.getImage()}" alt="">
+                            <img src="${exposition.getImage()}" alt="">
                         </div>
                         <div class="expo__desc">
-                            <p class="nameExhib">${expositoion.getName()}</p>
-                            <p><span>Description: </span> ${expositoion.getAbout()}</p>
+                            <p class="nameExhib">${exposition.getName()}</p>
+                            <p><span>Description: </span> ${exposition.getAbout()}</p>
                         </div>
                     </div>
                 </div>
@@ -89,17 +73,13 @@
 
             <div class="next-previous">
                 <div class="previous">
-                    <a class="next-previous-btn np-btn ${page<=0?'hide':''}" href="exhibition?id=${exhib.get().getId()}&page=${page-1}">Previous</a>
+                    <a class="next-previous-btn np-btn ${pageNumber<=1?'hide':''}" href="exhibition?id=${exhib.get().getId()}&page=${pageNumber-1}">Previous</a>
                 </div>
                 <div class="next">
-                    <a class="next-previous-btn np-btn ${(numberOfExpo<=(page+1)*3)?'hide':''}" href="exhibition?id=${exhib.get().getId()}&page=${page+1}">Next</a>
+                    <a class="next-previous-btn np-btn ${(numberOfExpositions<=(pageNumber*3))?'hide':''}" href="exhibition?id=${exhib.get().getId()}&page=${pageNumber+1}">Next</a>
                 </div>
             </div>
-            <footer>
-                <div class="footer__inner">
-                    &copy; Valteris Elizabeth 2020
-                </div>
-            </footer>
+            <jsp:include page="commons/footer.jsp"/>
         </div>
     </section>
 </main>

@@ -1,8 +1,8 @@
 package com.exhibition.app.dao.impl;
 
-import com.exhibition.app.dao.connection.HikariCPManager;
 import com.exhibition.app.dao.ExpositionDao;
 import com.exhibition.app.dao.Page;
+import com.exhibition.app.dao.connection.HikariCPManager;
 import com.exhibition.app.entity.ExpositionEntity;
 
 import java.sql.PreparedStatement;
@@ -18,16 +18,22 @@ public class ExpositionDaoImpl extends AbstractDao<ExpositionEntity> implements 
     public static final String DELETE_QUERY = "DELETE FROM exposition WHERE id= ?;";
     public static final String FIND_BY_ID_QUERY = "SELECT * FROM exposition WHERE id = ?;";
     public static final String FIND_BY_EXHIBITION_ID_QUERY = "SELECT * FROM exposition WHERE exhib_id = ?;";
-    public static final String FIND_PAGE_BY_EXHIBITION_ID_QUERY = "SELECT * FROM user " +
+    public static final String FIND_PAGE_BY_EXHIBITION_ID_QUERY = "SELECT * FROM exposition " +
             "WHERE exhib_id = ? LIMIT ? OFFSET ?;";
+    public static final String COUNT_ALL_QUERY = "SELECT COUNT(*) FROM exposition WHERE exhib_id = ?;";
 
     public ExpositionDaoImpl(HikariCPManager connector) {
         super(connector, SAVE_QUERY, UPDATE_QUERY, DELETE_QUERY, FIND_BY_ID_QUERY);
     }
 
     @Override
-    public List<ExpositionEntity> findAll(Page page) {
-        return findAll(page, FIND_PAGE_BY_EXHIBITION_ID_QUERY);
+    public List<ExpositionEntity> findAll(Long id, Page page) {
+        return findAll(id, page, FIND_PAGE_BY_EXHIBITION_ID_QUERY);
+    }
+
+    @Override
+    public int count(Long id) {
+       return count(id, COUNT_ALL_QUERY);
     }
 
     @Override
@@ -56,6 +62,5 @@ public class ExpositionDaoImpl extends AbstractDao<ExpositionEntity> implements 
     protected void prepareStatementForUpdate(PreparedStatement statement, ExpositionEntity object) throws SQLException {
         prepareStatementForInsert(statement, object);
         statement.setLong(4, object.getId());
-
     }
 }

@@ -1,7 +1,7 @@
 package com.exhibition.app.entity;
 
 public class ExpositionEntity {
-    private final long id;
+    private final Long id;
     private final String name;
     private final String about;
     private final String image;
@@ -15,7 +15,7 @@ public class ExpositionEntity {
         this.exhibitionId = builder.exhibitionId;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

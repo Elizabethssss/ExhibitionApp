@@ -177,7 +177,7 @@ main{
     margin: 30px 0;
 }
 
-.next-previous-btn{
+.next-previous-btn, .btn{
     width: 140px;
     height: 40px;
     border: none;

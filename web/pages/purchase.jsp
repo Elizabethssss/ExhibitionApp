@@ -12,7 +12,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+          content="width=device-width, userEntity-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="../styles/purchase.css">
     <script src="https://kit.fontawesome.com/9549242389.js" crossorigin="anonymous"></script>
@@ -20,23 +20,7 @@
 </head>
 <body>
 
-<header>
-    <div class="container">
-        <div class="header__inner">
-            <div class="logo">
-                <h1><a href="index"><i class="fas fa-crown"></i> Elizabeth!!!</a></h1>
-            </div>
-            <nav id="main__menu">
-                <ul>
-                    <li class="hello">Hello, <span class="user-name">${username}</span> !</li>
-                    <a href="myProfile?page=0" class="pay-btn">My profile</a>
-                    <a href="purchase" class="pay-btn">${inCart} <i class="fas fa-shopping-basket"></i></a>
-                    <a href="logout" class="pay-btn">Log out</a>
-                </ul>
-            </nav>
-        </div>
-    </div>
-</header>
+<jsp:include page="commons/header.jsp"/>
 
 <main>
     <section>
@@ -48,7 +32,7 @@
                     <li><a href="">Purchase</a></li>
                 </ul>
             </div>
-                <section ${requestScope.ticketsMap.isEmpty()?'':'hidden'} class="alert alert-warning" role="alert">
+                <section ${requestScope.ticketsMap.isEmpty()?'':'hidden'} class="alert alert-warning" roleEntity="alert">
                         You haven't chosen exhibition!
                 </section>
             <c:forEach var="key" items="${ticketsMap.keySet()}">
@@ -59,7 +43,7 @@
                     </div>
                     <div class="description">
                         <p class="nameExhib">${exhib.get().getName()}</p>
-                        <p><span>Date: </span> ${exhib.get().getDate()}</p>
+                        <p><span>Date: </span> ${exhib.get().getDateFrom()}</p>
                         <p><span>Theme: </span> ${exhib.get().getTheme()}</p>
                         <p><span>About: </span>${exhib.get().getAbout()} ${exhib.get().getLongAbout()}</p>
                         <p><span>Price: </span> ${exhib.get().getPrice()} UAH</p>
@@ -71,16 +55,12 @@
                 </div>
             </c:forEach>
 
-            <div class="total">
+            <div ${requestScope.ticketsMap.isEmpty()?'hidden':''} class="total">
                 <a class="pay-btn p-btn" href="pay">Pay</a>
                 <p><span>Total: </span>${totalPrice} UAH</p>
             </div>
 
-            <footer>
-                <div class="footer__inner">
-                    &copy; Valteris Elizabeth 2020
-                </div>
-            </footer>
+            <jsp:include page="commons/footer.jsp"/>
         </div>
     </section>
 </main>

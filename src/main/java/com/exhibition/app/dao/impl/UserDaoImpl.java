@@ -1,7 +1,7 @@
 package com.exhibition.app.dao.impl;
 
-import com.exhibition.app.dao.connection.HikariCPManager;
 import com.exhibition.app.dao.UserDao;
+import com.exhibition.app.dao.connection.HikariCPManager;
 import com.exhibition.app.entity.UserEntity;
 
 import java.sql.PreparedStatement;
@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 public class UserDaoImpl extends AbstractDao<UserEntity> implements UserDao {
-    public static final String SAVE_QUERY = "INSERT INTO user VALUES (DEFAULT, ?, ?, ?);";
+    public static final String SAVE_QUERY = "INSERT INTO user VALUES (DEFAULT, ?, ?, ?, ?);";
     public static final String UPDATE_QUERY = "UPDATE user SET username = ?, email = ?, password = ? WHERE id= ?;";
     public static final String DELETE_QUERY = "DELETE FROM user WHERE id= ?;";
     public static final String FIND_BY_ID_QUERY = "SELECT * FROM user WHERE id = ?;";
@@ -38,7 +38,7 @@ public class UserDaoImpl extends AbstractDao<UserEntity> implements UserDao {
                 .withUsername(rs.getString("username"))
                 .withEmail(rs.getString("email"))
                 .withPassword(rs.getString("password"))
-               // .withRole((RoleEntity) rs.getObject("role_id"))
+                .withRoleId(rs.getInt("role_id"))
                 .build();
     }
 
@@ -47,11 +47,12 @@ public class UserDaoImpl extends AbstractDao<UserEntity> implements UserDao {
         statement.setString(1, object.getUsername());
         statement.setString(2, object.getEmail());
         statement.setString(3, object.getPassword());
+        statement.setInt(4, object.getRoleId());
     }
 
     @Override
     protected void prepareStatementForUpdate(PreparedStatement statement, UserEntity object) throws SQLException {
         prepareStatementForInsert(statement, object);
-        statement.setLong(4, object.getId());
+        statement.setLong(5, object.getId());
     }
 }

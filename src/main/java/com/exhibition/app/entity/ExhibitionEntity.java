@@ -13,7 +13,6 @@ public class ExhibitionEntity {
     private final String longAbout;
     private final double price;
     private final String image;
-  //  private final List<ExpositionEntity> expositionEntities;
 
     private ExhibitionEntity(Builder builder) {
         this.id = builder.id;
@@ -25,10 +24,9 @@ public class ExhibitionEntity {
         this.longAbout = builder.longAbout;
         this.price = builder.price;
         this.image = builder.image;
-   //     this.expositionEntities = builder.expositionEntities;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -64,10 +62,6 @@ public class ExhibitionEntity {
         return image;
     }
 
-//    public List<ExpositionEntity> getExpositionEntities() {
-//        return expositionEntities;
-//    }
-
     public static Builder builder() { return new Builder(); }
 
     public static class Builder {
@@ -80,7 +74,6 @@ public class ExhibitionEntity {
         private String longAbout;
         private double price;
         private String image;
-        private List<ExpositionEntity> expositionEntities;
 
         private Builder() {}
 
@@ -127,11 +120,6 @@ public class ExhibitionEntity {
             this.image = image;
             return this;
         }
-
-//        public Builder withExpositions(List<ExpositionEntity> expositionEntities) {
-//            this.expositionEntities = expositionEntities;
-//            return this;
-//        }
 
         public ExhibitionEntity build() {return new ExhibitionEntity(this); }
     }

@@ -4,3 +4,5 @@ target
 out
 logs
 lib
+web/img
+web/WEB-INF/classes

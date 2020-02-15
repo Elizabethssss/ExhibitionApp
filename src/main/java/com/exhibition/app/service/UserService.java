@@ -1,8 +1,11 @@
 package com.exhibition.app.service;
 
-import com.exhibition.app.entity.UserEntity;
+import com.exhibition.app.domain.User;
+
+import java.util.Optional;
 
 public interface UserService {
-    void register(UserEntity userEntity);
+    void register(User user);
     boolean login(String username, String password);
+    Optional<User> isUserExist(String email);
 }
