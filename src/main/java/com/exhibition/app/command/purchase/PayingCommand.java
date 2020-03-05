@@ -3,25 +3,31 @@ package com.exhibition.app.command.purchase;
 import com.exhibition.app.command.Command;
 import com.exhibition.app.domain.User;
 import com.exhibition.app.injector.ApplicationInjector;
+import com.exhibition.app.service.Localization;
 import com.exhibition.app.service.TicketService;
 import com.exhibition.app.service.validator.CreditCardValidator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.time.LocalDate;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 public class PayingCommand implements Command {
     final TicketService ticketService;
     final CreditCardValidator creditCardValidator;
+    final Localization localization;
 
-    public PayingCommand(TicketService ticketService) {
+    public PayingCommand(TicketService ticketService, Localization localization) {
         this.ticketService = ticketService;
         this.creditCardValidator = ApplicationInjector.getCreditCardValidator();
+        this.localization = localization;
     }
 
     @Override
     public String show(HttpServletRequest request) {
         HttpSession session = request.getSession();
+        request.setAttribute("bundle", localization.getLocalizationBundle(request));
 
         final long totalPrice = (long) session.getAttribute("totalPrice");
         final int inCart = (int) session.getAttribute("inCart");
@@ -44,9 +50,12 @@ public class PayingCommand implements Command {
         final HttpSession session = request.getSession();
         final Optional<User> user = (Optional<User>) session.getAttribute("user");
         final long userId = user.get().getId();
+        final ResourceBundle bundle = localization.getLocalizationBundle(request);
 
-        String errorMessage = "Fill all parameters!";
+        String errorMessage = bundle.getString("fill_all");
         boolean payed = true;
+
+        request.setAttribute("bundle", bundle);
 
         if (cardNumber.equals("")) {
             request.setAttribute("errorNumber", true);
@@ -54,7 +63,7 @@ public class PayingCommand implements Command {
         }
         else if (!creditCardValidator.validateNumberInput(cardNumber) ||
                 !creditCardValidator.validateCreditCardNumber(cardNumber)) {
-            errorMessage = "Not valid card number!";
+            errorMessage = bundle.getString("not_valid_card");
             request.setAttribute("errorNumber", true);
             payed = false;
         }
@@ -67,7 +76,7 @@ public class PayingCommand implements Command {
             payed = false;
         }
         else if (!creditCardValidator.validateDateInput(cardMonth, cardYear)) {
-            errorMessage = "Wrong date!";
+            errorMessage = bundle.getString("wrong_date");
             request.setAttribute("errorDate", true);
             payed = false;
         }
@@ -76,7 +85,7 @@ public class PayingCommand implements Command {
             payed = false;
         }
         else if(!creditCardValidator.validateCVVInput(cardCVV)) {
-            errorMessage = "Wrong CVV!";
+            errorMessage = bundle.getString("wrong_cvv");
             payed = false;
         }
 
@@ -84,7 +93,7 @@ public class PayingCommand implements Command {
             ticketService.updateIsBought(userId);
             session.setAttribute("totalPrice", 0L);
             session.setAttribute("inCart", 0);
-            session.setAttribute("message", "Paid successfully!");
+            session.setAttribute("message", bundle.getString("payed_successfully"));
             return "/pay";
         }
         else {

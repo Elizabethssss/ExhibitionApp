@@ -27,13 +27,13 @@
         <div class="container">
             <div class="brd-crn">
                 <ul>
-                    <li><a href="index">Home</a></li>
+                    <li><a href="index?lang=${sessionScope.get("locale")}">${requestScope.bundle.getString("home")}</a></li>
                     <li>/</li>
-                    <li><a href="">Purchase</a></li>
+                    <li><a href="">${requestScope.bundle.getString("purchase")}</a></li>
                 </ul>
             </div>
                 <section ${requestScope.ticketsMap.isEmpty()?'':'hidden'} class="alert alert-warning" roleEntity="alert">
-                        You haven't chosen exhibition!
+                        ${requestScope.bundle.getString("no_tickets")}
                 </section>
             <c:forEach var="key" items="${ticketsMap.keySet()}">
                 <c:set var="exhib" value="${ticketsMap.get(key)}"/>
@@ -43,21 +43,21 @@
                     </div>
                     <div class="description">
                         <p class="nameExhib">${exhib.get().getName()}</p>
-                        <p><span>Date: </span> ${exhib.get().getDateFrom()}</p>
-                        <p><span>Theme: </span> ${exhib.get().getTheme()}</p>
-                        <p><span>About: </span>${exhib.get().getAbout()} ${exhib.get().getLongAbout()}</p>
-                        <p><span>Price: </span> ${exhib.get().getPrice()} UAH</p>
+                        <p><span>${requestScope.bundle.getString("date")}: </span> ${exhib.get().getDateFrom()}</p>
+                        <p><span>${requestScope.bundle.getString("theme")}: </span> ${exhib.get().getTheme()}</p>
+                        <p><span>${requestScope.bundle.getString("about")}: </span>${exhib.get().getAbout()} ${exhib.get().getLongAbout()}</p>
+                        <p><span>${requestScope.bundle.getString("price")}: </span> ${exhib.get().getPrice()} UAH</p>
 
                     </div>
                     <div class="close">
-                        <a href="removeTicket?id=${key}">&#10008;</a>
+                        <a href="removeTicket?id=${key}&lang=${sessionScope.get("locale")}">&#10008;</a>
                     </div>
                 </div>
             </c:forEach>
 
             <div ${requestScope.ticketsMap.isEmpty()?'hidden':''} class="total">
-                <a class="pay-btn p-btn" href="pay">Pay</a>
-                <p><span>Total: </span>${totalPrice} UAH</p>
+                <a class="pay-btn p-btn" href="pay?lang=${sessionScope.get("locale")}">${requestScope.bundle.getString("pay")}</a>
+                <p><span>${requestScope.bundle.getString("total")}: </span>${totalPrice} ${requestScope.bundle.getString("currency")}</p>
             </div>
 
             <jsp:include page="commons/footer.jsp"/>

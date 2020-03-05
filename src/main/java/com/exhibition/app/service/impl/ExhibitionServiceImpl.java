@@ -15,8 +15,6 @@ import java.util.stream.Collectors;
 public class ExhibitionServiceImpl implements ExhibitionService {
     private final ExhibitionDao exhibitionDao;
     private final Mapper<ExhibitionEntity, Exhibition> exhibitionMapper;
-    private final String[] months = new String[] {"January", "February", "March", "April", "May",
-            "June", "July", "August", "September", "November", "December"};
 
     public ExhibitionServiceImpl(ExhibitionDao exhibitionDao,
                                  Mapper<ExhibitionEntity, Exhibition> exhibitionMapper) {
@@ -30,12 +28,12 @@ public class ExhibitionServiceImpl implements ExhibitionService {
     }
 
     @Override
-    public Map<String, List<Exhibition>> getMonthExhibitionsMap() {
-        Map<String, List<Exhibition>> result = new LinkedHashMap<>();
-        for (int i = 1; i <= months.length; i++) {
+    public Map<Integer, List<Exhibition>> getMonthExhibitionsMap() {
+        Map<Integer, List<Exhibition>> result = new LinkedHashMap<>();
+        for (int i = 1; i <= 12; i++) {
             List<Exhibition> temp = exhibitionDao.findByDateLike("%-%" + i + "-%").stream()
                     .map(exhibitionMapper::mapEntityToDomain).collect(Collectors.toList());
-            result.put(months[i-1], temp);
+            result.put(i-1, temp);
         }
         return result;
     }

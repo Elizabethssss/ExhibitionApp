@@ -30,16 +30,16 @@
         <div class="container">
             <div class="brd-crn">
                 <ul>
-                    <li><a href="index">Home</a></li>
+                    <li><a href="index?lang=${sessionScope.get("locale")}">${requestScope.bundle.getString("home")}</a></li>
                     <li>/</li>
-                    <li><a href="purchase">Purchase</a></li>
+                    <li><a href="purchase?lang=${sessionScope.get("locale")}">${requestScope.bundle.getString("purchase")}</a></li>
                     <li>/</li>
-                    <li><a href="">Credit Card</a></li>
+                    <li><a href="">${requestScope.bundle.getString("credit_card")}</a></li>
                 </ul>
             </div>
 
-            <h1 class="text-center">Ticket Payment</h1>
-            <form method="post" action="pay">
+            <h1 class="text-center">${requestScope.bundle.getString("ticket_payment")}</h1>
+            <form method="post" action="pay?lang=${sessionScope.get("locale")}">
                 <div class="card">
                     <div class="left">
                         <div class="card-wrapper">
@@ -65,8 +65,8 @@
                     </div>
                     <div class="right">
                         <div class="total">
-                            <p><span>Total: </span>${totalPrice} UAH</p>
-                            <button class="pay-btn" id="btn" type="submit">Pay</button>
+                            <p><span>${requestScope.bundle.getString("total")}: </span>${totalPrice} ${requestScope.bundle.getString("currency")}</p>
+                            <button class="pay-btn" id="btn" type="submit">${requestScope.bundle.getString("pay")}</button>
                         </div>
                     </div>
                 </div>

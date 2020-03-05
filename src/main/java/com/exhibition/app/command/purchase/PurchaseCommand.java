@@ -5,6 +5,7 @@ import com.exhibition.app.domain.Exhibition;
 import com.exhibition.app.domain.Ticket;
 import com.exhibition.app.domain.User;
 import com.exhibition.app.service.ExhibitionService;
+import com.exhibition.app.service.Localization;
 import com.exhibition.app.service.TicketService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,10 +18,12 @@ import java.util.Optional;
 public class PurchaseCommand implements Command {
     final TicketService ticketService;
     final ExhibitionService exhibitionService;
+    final Localization localization;
 
-    public PurchaseCommand(TicketService ticketService, ExhibitionService exhibitionService) {
+    public PurchaseCommand(TicketService ticketService, ExhibitionService exhibitionService, Localization localization) {
         this.ticketService = ticketService;
         this.exhibitionService = exhibitionService;
+        this.localization = localization;
     }
 
     @Override
@@ -28,6 +31,7 @@ public class PurchaseCommand implements Command {
         final HttpSession session = request.getSession();
         final Optional<User> user = (Optional<User>) session.getAttribute("user");
         final long userId = user.get().getId();
+        request.setAttribute("bundle", localization.getLocalizationBundle(request));
 
         final List<Ticket> userTickets = ticketService.getUserExhibsByUserId(userId, false);
         Map<Long, Optional<Exhibition>> ticketsMap = new LinkedHashMap<>();
@@ -44,6 +48,7 @@ public class PurchaseCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
+        request.setAttribute("bundle", localization.getLocalizationBundle(request));
         return "pages/purchase.jsp";
     }
 
@@ -53,5 +58,6 @@ public class PurchaseCommand implements Command {
         request.setAttribute("ticketsMap", ticketsMap);
         session.setAttribute("totalPrice", totalPrice);
         request.setAttribute("totalPrice", totalPrice);
+        request.setAttribute("inCart", session.getAttribute("inCart"));
     }
 }

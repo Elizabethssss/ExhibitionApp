@@ -25,7 +25,6 @@ public class UserValidatorImplTest {
 
         final User user = initUser("Lolitta", null);
         userValidatorImpl.validate(user);
-
     }
 
     @Test

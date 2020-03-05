@@ -24,8 +24,7 @@ public class TicketDaoImpl extends AbstractDao<TicketEntity> implements TicketDa
     public static final String FIND_BY_USER_ID_AND_BOUGHT_QUERY = "SELECT * FROM ticket WHERE user_id = ? AND is_bought = ?;";
     public static final String FIND_PAGE_BY_USER_ID_QUERY = "SELECT * FROM ticket " +
             "WHERE user_id = ? AND is_bought = 1 LIMIT ? OFFSET ?;";
-    //TODO: count all query
-    public static final String COUNT_ALL_QUERY = "";
+    public static final String COUNT_ALL_QUERY = "SELECT COUNT(*) FROM ticket WHERE user_id = ? AND is_bought = 1;";
 
 
     public TicketDaoImpl(HikariCPManager connector) {

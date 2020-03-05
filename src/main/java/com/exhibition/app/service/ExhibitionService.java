@@ -8,5 +8,5 @@ import java.util.Optional;
 
 public interface ExhibitionService {
     Optional<Exhibition> getExhibitionById(long id);
-    Map<String, List<Exhibition>> getMonthExhibitionsMap();
+    Map<Integer, List<Exhibition>> getMonthExhibitionsMap();
 }

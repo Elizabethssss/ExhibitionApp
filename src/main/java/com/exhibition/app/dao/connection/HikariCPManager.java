@@ -38,4 +38,9 @@ public class HikariCPManager implements ConnectionPool {
         }
     }
 
+    @Override
+    public void shutdown() {
+        ds.close();
+    }
+
 }

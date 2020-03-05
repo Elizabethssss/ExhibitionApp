@@ -14,32 +14,32 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://fonts.googleapis.com/css?family=Comfortaa&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles/LogIn.css">
-    <title>Login</title>
+    <title>${requestScope.bundle.getString("login")}</title>
 </head>
 <body>
+<a href="login?lang=en">EN</a>/<a href="login?lang=ru">RU</a>
+<form method="post" action="login?lang=${sessionScope.get("locale")}" class="login-form" accept-charset="ISO-8859-1">
+    <h1>${requestScope.bundle.getString("login")}</h1>
 
-<form method="post" action="login" class="login-form" accept-charset="ISO-8859-1">
-    <h1>Login</h1>
-
-    <div class="txtb ${error?'error':''}">
-        <label for="email">Email</label>
+    <div class="txtb ${requestScope.error?'error':''}">
+        <label for="email">${requestScope.bundle.getString("email")}</label>
         <input type="text" id="email" name="email" autocomplete="off" value="teddy020301@gmail.com${requestScope.email}">
     </div>
 
-    <div class="txtb ${error?'error':''}">
-        <label for="pass">Password</label>
+    <div class="txtb ${requestScope.error?'error':''}">
+        <label for="pass">${requestScope.bundle.getString("password")}</label>
         <input type="password" id="pass" name="password" autocomplete="off" value="123">
     </div>
 
     <div class="bottom-text">
-        <span style="color: red">${requestScope.alarm}</span>
+        <span style="color: red">${requestScope.alarm?requestScope.bundle.getString("wrong_login"):''}</span>
     </div>
 
-    <input type="submit" class="logbtn" value="Login">
+    <input type="submit" class="logbtn" value="${requestScope.bundle.getString("login")}">
 
     <div class="bottom-text">
-           <span id="btm-txt">You need to have an account to use the app<br>
-               Don't have an account? </span><a href="signUp">Sign Up</a>
+           <span id="btm-txt">${requestScope.bundle.getString("warning_sign_up")}<br>
+              ${requestScope.bundle.getString("not_sign_up")} </span><a href="signUp?lang=${sessionScope.get("locale")}">${requestScope.bundle.getString("sign_up")}</a>
     </div>
 
 </form>

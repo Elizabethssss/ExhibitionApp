@@ -128,11 +128,11 @@ public abstract class AbstractDao<T> implements GenericDao<T> {
             try(final ResultSet rs = ps.executeQuery()) {
                 int count = 0;
                 while (rs.next()) {
-                    count= rs.getInt(1);
+                    count = rs.getInt(1);
                 }
                 return count;
             }
-        } catch (SQLException e) {
+         } catch (SQLException e) {
             logger.error("Error in counting elements in db", e);
             throw new DataBaseException("Error in counting elements in db", e);
         }

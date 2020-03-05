@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public class UserDaoImpl extends AbstractDao<UserEntity> implements UserDao {
     public static final String SAVE_QUERY = "INSERT INTO user VALUES (DEFAULT, ?, ?, ?, ?);";
-    public static final String UPDATE_QUERY = "UPDATE user SET username = ?, email = ?, password = ? WHERE id= ?;";
+    public static final String UPDATE_QUERY = "UPDATE user SET username = ?, email = ?, password = ?, role_id = ? WHERE id= ?;";
     public static final String DELETE_QUERY = "DELETE FROM user WHERE id= ?;";
     public static final String FIND_BY_ID_QUERY = "SELECT * FROM user WHERE id = ?;";
     public static final String FIND_BY_USERNAME_QUERY = "SELECT * FROM user WHERE username = ?;";

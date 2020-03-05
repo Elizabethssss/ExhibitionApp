@@ -27,14 +27,14 @@
         <div class="container">
             <div class="brd-crn">
                 <ul>
-                    <li><a href="index">Home</a></li>
+                    <li><a href="index?lang=${sessionScope.get("locale")}">${requestScope.bundle.getString("home")}</a></li>
                     <li>/</li>
-                    <li><a href="">My Profile</a></li>
+                    <li><a href="">${requestScope.bundle.getString("profile")}</a></li>
                 </ul>
             </div>
 
             <div class="title">
-                <h1>Your Tickets:</h1>
+                <h1>${requestScope.bundle.getString("your_tickets")}:</h1>
             </div>
             <section ${requestScope.ticketsMap.isEmpty()?'':'hidden'} class="alert alert-warning" roleEntity="alert">
                 You haven't bought tickets yet!
@@ -47,20 +47,22 @@
                     </div>
                     <div class="description">
                         <p class="nameExhib">${exhib.get().getName()}</p>
-                        <p><span>Date: </span> ${exhib.get().getDateFrom()}</p>
-                        <p><span>Theme: </span> ${exhib.get().getTheme()}</p>
-                        <p><span>About: </span>${exhib.get().getAbout()}</p>
-                        <p><span>Price: </span> ${exhib.get().getPrice()} UAH</p>
+                        <p><span>${requestScope.bundle.getString("date")}: </span> ${exhib.get().getDateFrom()}</p>
+                        <p><span>${requestScope.bundle.getString("theme")}: </span> ${exhib.get().getTheme()}</p>
+                        <p><span>${requestScope.bundle.getString("about")}: </span>${exhib.get().getAbout()}</p>
+                        <p><span>${requestScope.bundle.getString("price")}: </span> ${exhib.get().getPrice()} UAH</p>
 
                     </div>
                 </div>
             </c:forEach>
             <div class="next-previous">
                 <div class="previous">
-                    <a class="next-previous-btn ${pageNumber<=1?'hide':''}" href="profile?page=${pageNumber-1}">Previous</a>
+                    <a class="next-previous-btn ${pageNumber<=1?'hide':''}" href="profile?page=${pageNumber-1}&lang=${sessionScope.get("locale")}">
+                        ${requestScope.bundle.getString("previous")}</a>
                 </div>
                 <div class="next">
-                    <a class="next-previous-btn ${(numberOfTickets<=(pageNumber*5))?'hide':''}" href="profile?page=${pageNumber+1}">Next</a>
+                    <a class="next-previous-btn ${(numberOfTickets<=(pageNumber*5))?'hide':''}" href="profile?page=${pageNumber+1}&lang=${sessionScope.get("locale")}">
+                        ${requestScope.bundle.getString("next")}</a>
                 </div>
             </div>
 

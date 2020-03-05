@@ -46,6 +46,9 @@ import java.util.Map;
 public class ApplicationInjector {
     private static final HikariCPManager DB_CONNECTOR = new HikariCPManager("db");
     private static final PasswordEncryptor PASSWORD_ENCRYPTOR = new PasswordEncryptor();
+    private static final Localization LOCALIZATION = new Localization();
+    public static final String[] LANGUAGES = new String[] {"ru", "en"};
+    public static final String LANGUAGE_DEFAULT = "en";
 
     private static final UserDao USER_DAO = new UserDaoImpl(DB_CONNECTOR);
     private static final ExhibitionDao EXHIBITION_DAO = new ExhibitionDaoImpl(DB_CONNECTOR);
@@ -65,16 +68,16 @@ public class ApplicationInjector {
     private static final ExpositionService EXPOSITION_SERVICE = new ExpositionServiceImpl(EXPOSITION_DAO, EXPOSITION_MAPPER);
     private static final TicketService TICKET_SERVICE = new TicketServiceImpl(TICKET_DAO, TICKET_MAPPER);
 
-    private static final Command LOGIN_COMMAND = new LoginCommand(USER_SERVICE);
-    private static final Command SIGN_UP_COMMAND = new SignUpCommand(USER_SERVICE);
-    private static final Command LOGOUT_COMMAND = new LogoutCommand(TICKET_SERVICE);
-    private static final Command INDEX_COMMAND = new IndexCommand(EXHIBITION_SERVICE);
-    private static final Command EXHIBITION_COMMAND = new ExhibitionCommand(EXHIBITION_SERVICE, EXPOSITION_SERVICE);
-    private static final Command BUYING_COMMAND = new BuyingCommand(TICKET_SERVICE);
-    private static final Command PURCHASE_COMMAND = new PurchaseCommand(TICKET_SERVICE, EXHIBITION_SERVICE);
-    private static final Command REMOVE_TICKET_COMMAND = new RemoveTicketCommand(TICKET_SERVICE);
-    private static final Command PAYING_COMMAND = new PayingCommand(TICKET_SERVICE);
-    private static final Command PROFILE_COMMAND = new ProfileCommand(TICKET_SERVICE, EXHIBITION_SERVICE);
+    private static final Command LOGIN_COMMAND = new LoginCommand(USER_SERVICE, TICKET_SERVICE, LOCALIZATION);
+    private static final Command SIGN_UP_COMMAND = new SignUpCommand(USER_SERVICE, LOCALIZATION);
+    private static final Command LOGOUT_COMMAND = new LogoutCommand();
+    private static final Command INDEX_COMMAND = new IndexCommand(EXHIBITION_SERVICE, LOCALIZATION);
+    private static final Command EXHIBITION_COMMAND = new ExhibitionCommand(EXHIBITION_SERVICE, EXPOSITION_SERVICE, LOCALIZATION);
+    private static final Command BUYING_COMMAND = new BuyingCommand(TICKET_SERVICE, LOCALIZATION);
+    private static final Command PURCHASE_COMMAND = new PurchaseCommand(TICKET_SERVICE, EXHIBITION_SERVICE, LOCALIZATION);
+    private static final Command REMOVE_TICKET_COMMAND = new RemoveTicketCommand(TICKET_SERVICE, LOCALIZATION);
+    private static final Command PAYING_COMMAND = new PayingCommand(TICKET_SERVICE, LOCALIZATION);
+    private static final Command PROFILE_COMMAND = new ProfileCommand(TICKET_SERVICE, EXHIBITION_SERVICE, LOCALIZATION);
 
     private static final Map<String, Command> COMMANDS = initCommands();
 
@@ -117,5 +120,4 @@ public class ApplicationInjector {
         return USER_USER_VALIDATOR;
     }
     public static CreditCardValidator getCreditCardValidator() { return CREDIT_CARD_VALIDATOR; }
-
 }

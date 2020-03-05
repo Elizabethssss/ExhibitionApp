@@ -36,26 +36,25 @@
 <%--        </select>--%>
 <%--      </div>--%>
 
-      <c:forEach var="month" items="${exhibMap.keySet()}">
+      <c:forEach var="month" items="${requestScope.exhibMap.keySet()}">
       <div class="exposition">
         <div class="month">
-            <c:if test="${!exhibMap.get(month).isEmpty()}">
+            <c:if test="${!requestScope.exhibMap.get(month).isEmpty()}">
               <h2>${month}</h2>
-
             </c:if>
         </div>
-        <c:forEach var="exhib" items="${exhibMap.get(month)}">
-          <a class="exhib-card" href="exhibition?id=${exhib.getId()}&page=1">
+        <c:forEach var="exhib" items="${requestScope.exhibMap.get(month)}">
+          <a class="exhib-card" href="exhibition?id=${exhib.getId()}&page=1&lang=${sessionScope.get("locale")}">
           <div class="descriptions">
             <div class="expo__photo">
               <img src="${exhib.getImage()}" alt="exposition photo" class="img150">
             </div>
             <div class="description">
               <p class="nameExhib">${exhib.getName()}</p>
-              <p><span>Date: </span> ${exhib.getDateFrom()} — ${exhib.getDateTo()}</p>
-              <p><span>Theme: </span> ${exhib.getTheme()}</p>
-              <p><span>About: </span>${exhib.getAbout()}</p>
-              <p><span>Price: </span> ${exhib.getPrice()} UAH</p>
+              <p><span>${requestScope.bundle.getString("date")}: </span> ${exhib.getDateFrom()} — ${exhib.getDateTo()}</p>
+              <p><span>${requestScope.bundle.getString("theme")}: </span> ${exhib.getTheme()}</p>
+              <p><span>${requestScope.bundle.getString("about")}: </span>${exhib.getAbout()}</p>
+              <p><span>${requestScope.bundle.getString("price")}: </span> ${exhib.getPrice()} ${requestScope.bundle.getString("currency")}</p>
             </div>
           </div>
           </a>

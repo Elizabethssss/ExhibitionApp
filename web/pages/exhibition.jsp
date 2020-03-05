@@ -31,30 +31,30 @@
         <div class="container">
             <div class="brd-crn">
                 <ul>
-                    <li><a href="index">Home</a></li>
+                    <li><a href="index?lang=${sessionScope.get("locale")}">${requestScope.bundle.getString("home")}</a></li>
                     <li>/</li>
-                    <li><a href="">Exhibition</a></li>
+                    <li><a href="">${requestScope.bundle.getString("exhibition")}</a></li>
                 </ul>
             </div>
 
-            <form action="buying?id=${exhib.get().getId()}&page=${pageNumber}" method="post">
+            <form action="buying?id=${exhib.get().getId()}&page=${pageNumber}&lang=${sessionScope.get("locale")}" method="post">
                 <div class="show">
                     <div class="show__photo">
                         <img src="${exhib.get().getImage()}" alt="exposition photo">
                     </div>
                     <div class="description">
                         <p class="nameExhib">${exhib.get().getName()}</p>
-                        <p><span>Date: </span> ${exhib.get().getDateFrom()}</p>
-                        <p><span>Theme: </span> ${exhib.get().getTheme()}</p>
-                        <p><span>About: </span>${exhib.get().getAbout()} ${exhib.get().getLongAbout()}</p>
-                        <p><span>Price: </span> ${exhib.get().getPrice()} UAH</p>
-                        <button class="buy-btn" type="submit">Buy</button>
+                        <p><span>${requestScope.bundle.getString("date")}: </span> ${exhib.get().getDateFrom()}</p>
+                        <p><span>${requestScope.bundle.getString("theme")}: </span> ${exhib.get().getTheme()}</p>
+                        <p><span>${requestScope.bundle.getString("about")}: </span>${exhib.get().getAbout()} ${exhib.get().getLongAbout()}</p>
+                        <p><span>${requestScope.bundle.getString("price")}: </span> ${exhib.get().getPrice()} UAH</p>
+                        <button class="buy-btn" type="submit">${requestScope.bundle.getString("buy")}</button>
                         <p style="float: right;">${toCart}</p>
                     </div>
                 </div>
             </form>
             <div class="title">
-                <h1>List of Expositions:</h1>
+                <h1>${requestScope.bundle.getString("list_of_expositions")}:</h1>
             </div>
 
             <c:forEach var="exposition" items="${expositions}">
@@ -65,7 +65,7 @@
                         </div>
                         <div class="expo__desc">
                             <p class="nameExhib">${exposition.getName()}</p>
-                            <p><span>Description: </span> ${exposition.getAbout()}</p>
+                            <p><span>${requestScope.bundle.getString("description")}: </span> ${exposition.getAbout()}</p>
                         </div>
                     </div>
                 </div>
@@ -73,10 +73,12 @@
 
             <div class="next-previous">
                 <div class="previous">
-                    <a class="next-previous-btn np-btn ${pageNumber<=1?'hide':''}" href="exhibition?id=${exhib.get().getId()}&page=${pageNumber-1}">Previous</a>
+                    <a class="next-previous-btn np-btn ${pageNumber<=1?'hide':''}" href="exhibition?id=${exhib.get().getId()}&page=${pageNumber-1}&lang=${sessionScope.get("locale")}">
+                        ${requestScope.bundle.getString("previous")}</a>
                 </div>
                 <div class="next">
-                    <a class="next-previous-btn np-btn ${(numberOfExpositions<=(pageNumber*3))?'hide':''}" href="exhibition?id=${exhib.get().getId()}&page=${pageNumber+1}">Next</a>
+                    <a class="next-previous-btn np-btn ${(numberOfExpositions<=(pageNumber*3))?'hide':''}" href="exhibition?id=${exhib.get().getId()}&page=${pageNumber+1}&lang=${sessionScope.get("locale")}">
+                        ${requestScope.bundle.getString("next")}</a>
                 </div>
             </div>
             <jsp:include page="commons/footer.jsp"/>

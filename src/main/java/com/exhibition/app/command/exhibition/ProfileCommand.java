@@ -6,6 +6,7 @@ import com.exhibition.app.domain.Exhibition;
 import com.exhibition.app.domain.Ticket;
 import com.exhibition.app.domain.User;
 import com.exhibition.app.service.ExhibitionService;
+import com.exhibition.app.service.Localization;
 import com.exhibition.app.service.TicketService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,10 +19,12 @@ import java.util.Optional;
 public class ProfileCommand implements Command {
     final TicketService ticketService;
     final ExhibitionService exhibitionService;
+    final Localization localization;
 
-    public ProfileCommand(TicketService ticketService, ExhibitionService exhibitionService) {
+    public ProfileCommand(TicketService ticketService, ExhibitionService exhibitionService, Localization localization) {
         this.ticketService = ticketService;
         this.exhibitionService = exhibitionService;
+        this.localization = localization;
     }
 
     @Override
@@ -29,6 +32,8 @@ public class ProfileCommand implements Command {
         final HttpSession session = request.getSession();
         final Optional<User> user = (Optional<User>) session.getAttribute("user");
         final long userId = user.get().getId();
+
+        request.setAttribute("bundle", localization.getLocalizationBundle(request));
 
         final int numberOfTickets = ticketService.getUserExhibsByUserId(userId, true).size();
         int pageNumber = Integer.parseInt(request.getParameter("page"));
@@ -44,18 +49,21 @@ public class ProfileCommand implements Command {
             ticketsMap.put(ticket.getId(), temp);
         }
 
-        setAttributes(request, numberOfTickets, pageNumber, ticketsMap);
+        setAttributes(request, numberOfTickets, pageNumber, ticketsMap, session);
         return "pages/myProfile.jsp";
     }
 
-    private void setAttributes(HttpServletRequest request, int numberOfTickets, int pageNumber, Map<Long, Optional<Exhibition>> ticketsMap) {
+    private void setAttributes(HttpServletRequest request, int numberOfTickets, int pageNumber, Map<Long,
+            Optional<Exhibition>> ticketsMap, HttpSession session) {
         request.setAttribute("ticketsMap", ticketsMap);
         request.setAttribute("pageNumber", pageNumber);
         request.setAttribute("numberOfTickets", numberOfTickets);
+        request.setAttribute("inCart", session.getAttribute("inCart"));
     }
 
     @Override
     public String execute(HttpServletRequest request) {
+        request.setAttribute("bundle", localization.getLocalizationBundle(request));
         return "pages/myProfile.jsp";
     }
 }

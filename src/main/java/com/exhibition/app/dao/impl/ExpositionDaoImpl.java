@@ -56,11 +56,12 @@ public class ExpositionDaoImpl extends AbstractDao<ExpositionEntity> implements 
         statement.setString(1, object.getName());
         statement.setString(2, object.getAbout());
         statement.setString(3, object.getImage());
+        statement.setLong(4, object.getExhibitionId());
     }
 
     @Override
     protected void prepareStatementForUpdate(PreparedStatement statement, ExpositionEntity object) throws SQLException {
         prepareStatementForInsert(statement, object);
-        statement.setLong(4, object.getId());
+        statement.setLong(5, object.getId());
     }
 }
