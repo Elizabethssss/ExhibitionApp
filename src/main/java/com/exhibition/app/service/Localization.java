@@ -15,9 +15,9 @@ public class Localization {
 
         if (lang.equals("ru")) {
             locale = new Locale("ru", "RU");
-            bundle = ResourceBundle.getBundle("locale/messages_ru", locale);
+            bundle = ResourceBundle.getBundle("locale/messages_ru", new UTF8Control());
         } else {
-            bundle = ResourceBundle.getBundle("locale/messages_en", locale);
+            bundle = ResourceBundle.getBundle("locale/messages_en", new UTF8Control());
         }
         return bundle;
     }
